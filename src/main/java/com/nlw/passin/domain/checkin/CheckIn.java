@@ -2,10 +2,7 @@ package com.nlw.passin.domain.checkin;
 
 import com.nlw.passin.domain.attendee.Attendee;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -15,7 +12,8 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChekIn {
+@Builder
+public class CheckIn {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

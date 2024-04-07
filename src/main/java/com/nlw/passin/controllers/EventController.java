@@ -1,6 +1,8 @@
 package com.nlw.passin.controllers;
 
+import com.nlw.passin.dto.attendee.AttendeeIdDTO;
 import com.nlw.passin.dto.attendee.AttendeeListResponseDTO;
+import com.nlw.passin.dto.attendee.AttendeeRequestDTO;
 import com.nlw.passin.dto.event.EventIdDTO;
 import com.nlw.passin.dto.event.EventRequestDTO;
 import com.nlw.passin.dto.event.EventResponseDTO;
@@ -34,7 +36,16 @@ public class EventController {
         return ResponseEntity.created(uri).body(eventIdDTO);
     }
 
-    @GetMapping("/attendees/{eventId}")
+    @PostMapping("/{eventId}/attendees")
+    public ResponseEntity<AttendeeIdDTO> registerParticipant(@PathVariable String eventId, @RequestBody AttendeeRequestDTO body, UriComponentsBuilder uriComponentsBuilder){
+        AttendeeIdDTO attendeeIdDTO = this.eventService.registerAttendeeOnEvent(eventId, body);
+
+        var uri = uriComponentsBuilder.path("/attendees/{attendeeId}/badge").buildAndExpand(attendeeIdDTO.attendeeId()).toUri();
+
+        return ResponseEntity.created(uri).body(attendeeIdDTO);
+    }
+
+    @GetMapping("/attendees/{'eventId'}")
     public ResponseEntity<AttendeeListResponseDTO> getEventAttendees(@PathVariable String eventId) {
         AttendeeListResponseDTO attendeeListResponseDTO = this.attendeeService.getEventsAttendee(eventId);
         return ResponseEntity.ok(attendeeListResponseDTO);
