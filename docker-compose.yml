@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  pass_in:
+    container_name: pass_in
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=pass_in

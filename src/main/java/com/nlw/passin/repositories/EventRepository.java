@@ -1,4 +1,4 @@
-package com.nlw.passin.domain.repositories;
+package com.nlw.passin.repositories;
 
 import com.nlw.passin.domain.event.Event;
 import org.springframework.data.jpa.repository.JpaRepository;
