@@ -16,6 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,15 +28,23 @@ public class AttendeeService {
         return this.attendeeRepository.findByEventId(eventId);
     }
 
-    public AttendeeListResponseDTO getEventsAttendee(String eventId){
+    public AttendeeListResponseDTO getEventsAttendee(String eventId, int page, String query){
         List<Attendee> attendeeList = this.getAllAttendeesFromEvent(eventId);
-
-        List<AttendeeDetails> attendeeDetailsList = attendeeList.stream().map(attendee ->{
+        if (query != null && !query.isEmpty()) {
+            attendeeList = attendeeList.stream()
+                    .filter(attendee -> attendee.getName().toLowerCase().contains(query.toLowerCase()))
+                    .toList();
+        }
+        List<Attendee> paginatedAttendeeList = attendeeList.stream()
+                .skip(page * 10)
+                .limit(10)
+                .toList();
+        List<AttendeeDetails> attendeeDetailsList = paginatedAttendeeList.stream().map(attendee ->{
             Optional<CheckIn> chekIn = this.checkInService.getCheckIn(attendee.getId());
             LocalDateTime checkedInAt = chekIn.<LocalDateTime>map(CheckIn::getCreatedAt).orElse(null);
             return new AttendeeDetails(attendee.getId(),attendee.getName(),attendee.getEmail(),attendee.getCreatedAt(),checkedInAt);
         }).toList();
-        return new AttendeeListResponseDTO(attendeeDetailsList);
+        return new AttendeeListResponseDTO(attendeeDetailsList, attendeeList.size());
     }
 
     public void verifyAttendeeSubscription(String email, String eventId){

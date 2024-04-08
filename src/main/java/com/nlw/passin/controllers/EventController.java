@@ -16,6 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RestController
 @RequestMapping("/events")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173")
 public class EventController {
 
     private final EventService eventService;
@@ -46,8 +47,11 @@ public class EventController {
     }
 
     @GetMapping("/attendees/{eventId}")
-    public ResponseEntity<AttendeeListResponseDTO> getEventAttendees(@PathVariable String eventId) {
-        AttendeeListResponseDTO attendeeListResponseDTO = this.attendeeService.getEventsAttendee(eventId);
+    public ResponseEntity<AttendeeListResponseDTO> getEventAttendees(
+            @PathVariable String eventId,
+            @RequestParam(defaultValue = "0") int pageIndex,
+            @RequestParam(defaultValue = "") String query){
+        AttendeeListResponseDTO attendeeListResponseDTO = this.attendeeService.getEventsAttendee(eventId, pageIndex, query);
         return ResponseEntity.ok(attendeeListResponseDTO);
     }
 }
