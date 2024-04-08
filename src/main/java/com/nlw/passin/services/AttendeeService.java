@@ -9,7 +9,6 @@ import com.nlw.passin.dto.attendee.AttendeeDetails;
 import com.nlw.passin.dto.attendee.AttendeeListResponseDTO;
 import com.nlw.passin.domain.attendee.exceptions.AttendeeAlreadyExistException;
 import com.nlw.passin.repositories.AttendeeRepository;
-import com.nlw.passin.repositories.CheckInRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
